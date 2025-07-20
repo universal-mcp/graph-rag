@@ -22,6 +22,10 @@ classifiers = [
 ]
 # Add runtime dependencies here if any are known upfront
 dependencies = [
+    "httpx-aiohttp>=0.1.8",
+    "lightrag-hku[api]>=1.4.3",
+    "nano-vectordb>=0.0.4.3",
+    "neo4j>=5.28.1",
     "universal_mcp>=0.1.22",
 ]
 
