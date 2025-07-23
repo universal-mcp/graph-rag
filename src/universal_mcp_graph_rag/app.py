@@ -71,7 +71,7 @@ class GraphRagApp(APIApplication):
         """
         Initializes the GraphRagApp.
         """
-        super().__init__(name="graph-rag", integration=integration, **kwargs)
+        super().__init__(name="context", integration=integration, **kwargs)
         self.rag: LightRAG | None = None
 
     async def initialize(self):
@@ -100,28 +100,26 @@ class GraphRagApp(APIApplication):
         if not self.rag:
             await self.initialize()
 
-    async def query_rag(self, query: str):
+    async def search(self, query: str):
         """
-        Runs a query against the RAG system and prints the result.
-
+        Search your collection of documents for results semantically similar to the input query. 
+        Collection description: contains research reports on financial markets received on email listed.equities@360.one
+        Make sure to include inline citations and a numbered list of sources at the end of the response.
+        
         Args:
             query (str): The question to ask the RAG system.
-            enable_rerank (bool): Set to True to enable result reranking. Defaults to False.
         """
         await self._ensure_initialized()
         logger.info(f"Querying RAG with: '{query}'")
-        param = QueryParam(mode="global", enable_rerank=False)
+        param = QueryParam(mode="mix", enable_rerank=True)
         result = await self.rag.aquery(query, param=param)
         
-        print("--- Query Result ---")
-        print(result)
-        print("--------------------")
         return result
 
     def list_tools(self):
         """Lists the available tools for this application."""
         return [
-            self.query_rag, 
+            self.search, 
             ]
 
     async def finalize(self):
